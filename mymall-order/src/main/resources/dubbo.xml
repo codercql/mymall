@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+<!--       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"-->
+<!--       xsi:schemaLocation="http://www.springframework.org/schema/beans-->
+<!--    http://www.springframework.org/schema/beans/spring-beans.xsd-->
+<!--    http://code.alibabatech.com/schema/dubbo-->
+<!--    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <!--注意：port ，消费者 ，提供者的顺序不要变-->
+    <dubbo:registry address="zookeeper://116.62.128.210:2181?backup=116.62.128.210:2182,116.62.128.210:2183" timeout="60000"/>
+    <!-- port值-1 表示让dubbo自行找一个可用的port -->
+    <dubbo:protocol port="-1" name="dubbo"/>
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <dubbo:application name="dubbo"/>
+    <!--消费者-->
+    <!--关闭服务消费方所有服务的启动检查。dubbo缺省会在启动时检查依赖的服务是否可用，不可用时会抛出异常，阻止Spring初始化完成。url="dubbo//172.16.1.112:20880"-->
+    <dubbo:consumer check="false" />
+<!--    &lt;!&ndash;reference 采用xml配置实现,在代码中获取远程服务需要加注解@Autowired&ndash;&gt;-->
+    <dubbo:reference id="productService" check="false"
+                     interface="com.chen.mymall.common.service.ProductService"
+                     loadbalance="roundrobin"/>
+    <dubbo:annotation package="com.chen.mymall.product.service.impl.*"/>
+
+    <dubbo:reference id="shoppingCartService" check="false"
+                     interface="com.chen.mymall.common.service.ShoppingCartService"
+                     loadbalance="roundrobin"/>
+    <dubbo:annotation package="com.chen.mymall.product.service.impl.*"/>
+
+
+<!--    消费者 1、ProductService 2、ShoppingCartService 3、SeckillProductService-->
+
+
+
+
+    <!--消费者 -->
+
+    <dubbo:reference id="seckillProductService" check="false"
+                     interface="com.chen.mymall.common.service.SeckillProductService"
+                     loadbalance="roundrobin"/>
+    <dubbo:annotation package="com.chen.mymall.seckill.service.impl.*"/>
+
+
+    <!--提供者-->
+
+    <dubbo:service protocol="dubbo" ref="collectService"
+                   interface="com.chen.mymall.common.service.CollectService"
+                   loadbalance="roundrobin"/>
+    <bean id="collectService" class="com.chen.mymall.order.service.impl.CollectServiceImpl"/>
+
+    <dubbo:service protocol="dubbo" ref="orderService"
+                   interface="com.chen.mymall.common.service.OrderService"
+                   loadbalance="roundrobin"/>
+    <bean id="orderService" class="com.chen.mymall.order.service.impl.OrderServiceImpl"/>
+
+</beans>
+
+
+
+
+
+
