@@ -11,4 +11,5 @@ class MymallUserApplicationTests {
     }
 
     //this is test for changing mymall-user-test on IDE.
+//this is test for changing mymall-user-test on github.
 }
