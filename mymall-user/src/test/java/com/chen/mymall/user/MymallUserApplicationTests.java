@@ -10,4 +10,5 @@ class MymallUserApplicationTests {
     void contextLoads() {
     }
 
+    //this is test for changing mymall-user-test on IDE.
 }
