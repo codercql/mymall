@@ -9,5 +9,5 @@ class MymallUserApplicationTests {
     @Test
     void contextLoads() {
     }
-
+//this is test for changing mymall-user-test on github.
 }
